@@ -1,58 +1,30 @@
 const TerserJsPlugin = require('terser-webpack-plugin');
 
-const serverBuild = {
-    mode: 'production',
-    entry: './src/twig.js',
-    target: 'node',
-    node: false,
-    output: {
-        path: __dirname,
-        filename: 'twig.js',
-        library: 'Twig',
-        libraryTarget: 'umd'
-    },
-    optimization: {
-        minimize: false
-    }
-};
-
-const clientBuild = {
-    mode: 'production',
-    entry: './src/twig.js',
-    target: 'web',
-    node: {
-        __dirname: false,
-        __filename: false
-    },
-    module: {
-        rules: [
-            {
-                exclude: /(node_modules)/,
+function createConfig(minimize) {
+    const config = {
+        mode: 'production',
+        entry: './index.client.js',
+        target: 'web',
+        module: {
+            rules: [{
                 use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env'],
-                        plugins: [
-                            '@babel/plugin-transform-modules-commonjs',
-                            '@babel/plugin-transform-runtime'
-                        ]
-                    }
+                    loader: 'ifdef-loader',
+                    options: {target: 'web'}
                 }
-            }
-        ]
-    },
-    output: {
-        path: __dirname,
-        filename: 'twig.min.js',
-        library: 'Twig',
-        libraryTarget: 'umd'
-    },
-    optimization: {
-        minimize: true,
-        minimizer: [new TerserJsPlugin({
-            include: /\.min\.js$/
-        })]
-    }
-};
+            }]
+        },
+        output: {
+            filename: minimize ? 'twig.min.js' : 'twig.js',
+            library: 'twig',
+            libraryTarget: 'amd'
+        },
+        optimization: {
+            minimize,
+            minimizer: [new TerserJsPlugin()]
+        }
+    };
 
-module.exports = [serverBuild, clientBuild];
+    return config;
+}
+
+module.exports = [createConfig(false), createConfig(true)];
