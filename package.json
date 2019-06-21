@@ -30,6 +30,8 @@
     "posttest": "xo src lib bin"
   },
   "dependencies": {
+    "ky": "^0.11.1",
+    "ky-universal": "^0.2.1",
     "locutus": "^2.0.11",
     "minimatch": "3.0.x",
     "walk": "2.3.x"
