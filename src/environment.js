@@ -30,6 +30,11 @@ export default class Environment {
     * @param {string} loaderId The id of a registered loader
     */
     setLoader(loaderId) {
+        if (!this.loaders.has(loaderId)) {
+            throw new Error(`Unable to set current loader. No loader associated with id '${loaderId}'.`);
+        }
+
+        this.currentLoaderId = loaderId;
     }
 
     /**
@@ -38,6 +43,11 @@ export default class Environment {
     * @param {Object} config The loader configuration object
     */
     setLoaderConfig(loaderId, config) {
+        if (!this.loaders.has(loaderId)) {
+            throw new Error(`Unable to set loader configuration. No loader associated with id '${loaderId}'.`);
+        }
+
+        this.configs.set(loaderId, config);
     }
 
     /**
@@ -47,6 +57,12 @@ export default class Environment {
     * @param {boolean} [setCurrent=false] Set this loader to be the current loader
     */
     addLoader(loaderId, definition, config, setCurrent = false) {
+        this.loaders.set(loaderId, definition);
+        this.configs.set(loaderId, config);
+
+        if (setCurrent) {
+            this.currentLoaderId = loaderId;
+        }
     }
 
     /**
