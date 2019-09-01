@@ -28,14 +28,14 @@ test('sets a loader as the current loader', t => {
     const instance = new Environment();
     instance.loaders.set('A', loader);
 
-    instance.setLoader('A')
+    instance.setCurrentLoader('A')
 
     t.is(instance.currentLoaderId, 'A');
 });
 
 test('throws an error when invalid id is used to set the current loader', t => {
     const instance = new Environment();
-    t.throws(()=>{instance.setLoader('A')});
+    t.throws(()=>{instance.setCurrentLoader('A')});
 });
 
 test('sets the configuration of a loader', t => {

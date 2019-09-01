@@ -29,7 +29,7 @@ export default class Environment {
     * Set the current loader to be used by the environment
     * @param {string} loaderId The id of a registered loader
     */
-    setLoader(loaderId) {
+    setCurrentLoader(loaderId) {
         if (!this.loaders.has(loaderId)) {
             throw new Error(`Unable to set current loader. No loader associated with id '${loaderId}'.`);
         }
